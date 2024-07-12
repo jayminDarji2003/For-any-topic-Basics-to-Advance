@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Test</title>
+</head>
+
+<body>
+    <h1>Cookie Test</h1>
+    <button id="getCookie">Get Cookie</button>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById('getCookie').addEventListener('click', () => {
+            fetch('http://localhost:3000/user')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('message').textContent = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+
+</html>
