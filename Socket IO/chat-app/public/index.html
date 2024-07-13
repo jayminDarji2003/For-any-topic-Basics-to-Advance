@@ -1,0 +1,360 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT APP</title>
+
+    <style>
+        #message-response {
+            border: 1px solid lightcoral;
+            font-size: large;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CHATTING APP</h1>
+
+    <input type="text" id="message" placeholder="enter message">
+    <button id="sendBtn">send</button>
+
+    <div id="message-response">
+        <h1>Message : </h1>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendBtn = document.getElementById("sendBtn");
+        const inputText = document.getElementById("message");
+        const messagePlace = document.getElementById("message-response");
+
+        socket.on("msg", (messageResponse) => {
+            // console.log(messageResponse)
+            const p = document.createElement("p");  // create "p" tag
+            p.innerText = messageResponse; // add message to "p" tag
+            messagePlace.appendChild(p);  // add "p" tag to "messagePlace"
+        })
+
+        sendBtn.addEventListener("click", (e) => {
+            const message = inputText.value;
+            // console.log(message);
+            socket.emit("user-message", message);  // send to server
+        })
+    </script>
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+
+<!-- add more style -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT APP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #fff;
+        }
+
+        #chat-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 400px;
+        }
+
+        #message {
+            width: 75%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #sendBtn {
+            padding: 10px 15px;
+            border: none;
+            background-color: #6a11cb;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendBtn:hover {
+            background-color: #2575fc;
+        }
+
+        #message-response {
+            border: 1px solid lightcoral;
+            font-size: large;
+            padding: 10px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #message-response h1 {
+            font-size: 1.2em;
+            margin: 0;
+            color: #fff;
+        }
+
+        #message-response p {
+            margin: 5px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat-container">
+        <h1>CHATTING APP</h1>
+        <div>
+            <input type="text" id="message" placeholder="Enter message">
+            <button id="sendBtn">Send</button>
+        </div>
+        <div id="message-response">
+            <h1>Messages:</h1>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendBtn = document.getElementById("sendBtn");
+        const inputText = document.getElementById("message");
+        const messagePlace = document.getElementById("message-response");
+
+        socket.on("msg", (messageResponse) => {
+            const p = document.createElement("p");
+            p.innerText = messageResponse;
+            messagePlace.appendChild(p);
+            messagePlace.scrollTop = messagePlace.scrollHeight;
+        });
+
+        sendBtn.addEventListener("click", () => {
+            const message = inputText.value;
+            socket.emit("user-message", message);
+            inputText.value = "";
+        });
+    </script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT APP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #fff;
+        }
+
+        #chat-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 400px;
+        }
+
+        #message {
+            width: 75%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #sendBtn {
+            padding: 10px 15px;
+            border: none;
+            background-color: #6a11cb;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendBtn:hover {
+            background-color: #2575fc;
+        }
+
+        #message-response {
+            border: 1px solid lightcoral;
+            font-size: large;
+            padding: 10px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #message-response h1 {
+            font-size: 1.2em;
+            margin: 0;
+            color: #fff;
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .user-message {
+            background: rgba(0, 0, 0, 0.2);
+            text-align: right;
+        }
+
+        .response-message {
+            background: rgba(255, 255, 255, 0.2);
+            text-align: left;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat-container">
+        <h1>CHATTING APP</h1>
+        <div>
+            <input type="text" id="message" placeholder="Enter message">
+            <button id="sendBtn">Send</button>
+        </div>
+        <div id="message-response">
+            <h1>Messages Show Here</h1>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendBtn = document.getElementById("sendBtn");
+        const inputText = document.getElementById("message");
+        const messagePlace = document.getElementById("message-response");
+
+        socket.on("msg", (messageResponse) => {
+            const p = document.createElement("p");
+            p.classList.add("message", "response-message");
+            p.innerText = messageResponse;
+            messagePlace.appendChild(p);
+            messagePlace.scrollTop = messagePlace.scrollHeight;
+        });
+
+        sendBtn.addEventListener("click", () => {
+            const message = inputText.value;
+            if (message.trim() !== "") {
+                const p = document.createElement("p");
+                p.classList.add("message", "user-message");
+                p.innerText = message;
+                messagePlace.appendChild(p);
+                messagePlace.scrollTop = messagePlace.scrollHeight;
+                socket.emit("user-message", message);
+                inputText.value = "";
+            }
+        });
+    </script>
+</body>
+
+</html>
