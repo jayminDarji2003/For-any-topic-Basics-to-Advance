@@ -25,10 +25,22 @@ app.get("/", (req, res) => {
 
 // creating one circuit
 io.on("connection", (socket) => {
-    // console.log("used connected ", socket.id);
+    console.log("used connected ", socket.id);
 
-    socket.on("message", (msg) => {
+    socket.on("message", (msg) => {   // fetch message from client.
         console.log(msg);
+
+        // send message to everyone in IO. self also
+        // sab ko message bhej do, khud ko bhi
+        // io.emit("receive-message", msg);    
+
+        // except self, send message to to everyone in IO
+        // khud ko chhod ke, sab ko bhej do
+        // socket.broadcast.emit("receive-message", msg);
+
+        // send message to specific user
+        // user id comming from frontend
+        socket.to(msg.room).emit("receive-message", msg);
     })
 
     //  send message to everyone, even self also
@@ -38,9 +50,9 @@ io.on("connection", (socket) => {
     // socket.broadcast.emit("welcome", `${socket.id} joined the server`);
 
     // disconnect socket
-    // socket.on("disconnect", () => {
-    //     console.log("user disconnected", socket.id);
-    // })
+    socket.on("disconnect", () => {
+        console.log("user disconnected", socket.id);
+    })
 })
 
 server.listen(3000, () => {
