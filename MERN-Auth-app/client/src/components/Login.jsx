@@ -44,16 +44,16 @@ const Login = () => {
 
         console.log(response);
 
-        // if (response.status === 200) {
-        //   toast.success("Successfully login");
-        // }
+        if (response.status === 200) {
+          toast.success("Successfully login");
+        }
 
         setEmail("");
         setPassword("");
 
-        // dispatch(addToken(response?.data?.token));
+        dispatch(addToken(response?.data?.token));
 
-        // navigate("/dashboard/user");
+        navigate("/dashboard/user");
       } catch (error) {
         if (error.response && error.response.status === 400) {
           toast.error(error.response.data.message);

@@ -55,7 +55,7 @@ const register = async (req, res) => {
 };
 
 
-const login_original = async (req, res) => {
+const login = async (req, res) => {
     try {
         // fetch data
         const { email, password } = req.body;
@@ -95,22 +95,28 @@ const login_original = async (req, res) => {
                     expiresIn: "2h"
                 });
 
-            user.token = token;
-            req.user = user;
+            // user.token = token;
+            // req.user = user;
 
             // create cookie
-            const options = {
-                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-                httpOnly: true,
-            }
+            // const options = {
+            //     httpOnly: true,
+            //     secure: true,
+            //     sameSite: "none"
+            // }
 
             // create cookie and send response
-            res.cookie("token", token, options).status(200).json({
-                success: true,
-                token,
-                user,
-                message: "user logged in successfully"
-            })
+            // res.cookie("token", token, options).status(200).json({
+            //     success: true,
+            //     token,
+            //     user,
+            //     message: "user logged in successfully"
+            // })
+
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" })
+                .json({
+                    message: "login successful",
+                });
         }
 
     } catch (error) {
@@ -123,57 +129,26 @@ const login_original = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        const response = await bcrypt.compare(password, user.password);
-
-        if (response) {
-            // Setting the cookie with additional options
-            res.cookie("token", "jaymindarji2003@gmail.com", {
-                httpOnly: true, // Ensures the cookie is only accessible by the web server
-                secure: process.env.NODE_ENV === 'production', // Ensures the cookie is sent only over HTTPS in production
-                sameSite: 'strict', // Prevents the cookie from being sent along with cross-site requests
-                maxAge: 24 * 60 * 60 * 1000 // Cookie expires after 1 day
-            });
-        }
-
-        return res.json({
-            success: true,
-            data: "working on cookie"
-        });
-
-    } catch (error) {
-        console.error("ERROR WHILE LOGIN", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error"
-        });
-    }
-};
 
 
 const users = async (req, res) => {
     try {
-        const cookieData = req.cookie?.token;
+        const cookieData = req.cookies;
 
         console.log(cookieData)
 
-        return res.status(200).json({
-            success: true,
-            message: "users found successfully",
-            data: cookieData
-        })
+        if (cookieData !== undefined) {
+            return res.status(200).json({
+                success: true,
+                message: "users found successfully",
+                data: cookieData
+            })
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "token not found",
+            })
+        }
     } catch (error) {
         return res.status(401).json({
             success: false,
@@ -182,4 +157,17 @@ const users = async (req, res) => {
     }
 }
 
-module.exports = { register, login, users }
+const jwt_secret = "jaymindarji"
+
+const data = async (req, res) => {
+    const token = jwt.sign({ _id: "difbfbsfi" }, jwt_secret);
+
+    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" })
+        .json({
+            message: "login successful",
+        });
+}
+
+
+
+module.exports = { register, login, users, data }
