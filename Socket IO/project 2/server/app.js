@@ -2,6 +2,9 @@ import express from "express";
 import { Server } from "socket.io"
 import { createServer } from "http"
 import cors from "cors"
+import jwt from "jsonwebtoken"
+
+const jwt_secret = "abc@123"
 
 const app = express();
 const server = createServer(app);
@@ -23,6 +26,23 @@ app.get("/", (req, res) => {
     res.send("Hello world!");
 })
 
+app.get("/login", (req, res) => {
+    const token = jwt.sign({ _id: "difbfbsfi" }, jwt_secret);
+
+    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" })
+        .json({
+            message: "login successful",
+        });
+})
+
+
+// middleware in socket.io
+const user = true;
+io.use((socket, next) => {
+    if (user) next();
+})
+
+
 // creating one circuit
 io.on("connection", (socket) => {
     console.log("used connected ", socket.id);
@@ -41,6 +61,10 @@ io.on("connection", (socket) => {
         // send message to specific user
         // user id comming from frontend
         socket.to(msg.room).emit("receive-message", msg);
+    })
+
+    socket.on("join-room", (roomName) => {
+        socket.join(roomName);
     })
 
     //  send message to everyone, even self also

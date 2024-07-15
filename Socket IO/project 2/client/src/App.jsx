@@ -9,14 +9,21 @@ function App() {
   const [room, setRoom] = useState("");
   const [socketId, setSocketId] = useState("");
   const [receivedMessage, setReceivedMessage] = useState([]);
+  const [roomName, setRoomName] = useState("");
 
-  console.log(receivedMessage);
+  // console.log(receivedMessage);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     socket.emit("message", { message, room });
     setMessage("");
     // setRoom("");
+  };
+
+  const joinRoomHandler = (e) => {
+    e.preventDefault();
+    socket.emit("join-room", roomName);
+    setRoomName("");
   };
 
   useEffect(() => {
@@ -54,6 +61,38 @@ function App() {
       </Typography>
 
       <form
+        onSubmit={joinRoomHandler}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: "10px",
+          marginBottom: "50px",
+          marginTop: "20px",
+        }}
+      >
+        <h5>JOIN ROOM</h5>
+
+        <TextField
+          value={roomName}
+          onChange={(e) => setRoomName(e.target.value)}
+          id="outline-basic"
+          label="room name"
+          variant="outlined"
+          // required={true}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          style={{ padding: "5px", marginLeft: "10px" }}
+        >
+          JOIN
+        </Button>
+      </form>
+
+      <form
         onSubmit={handleSubmit}
         style={{
           display: "flex",
@@ -69,7 +108,7 @@ function App() {
           id="outline-basic"
           label="Message"
           variant="outlined"
-          required={true}
+          // required={true}
         />
         <TextField
           value={room}
@@ -77,13 +116,13 @@ function App() {
           id="outline-basic"
           label="User ID"
           variant="outlined"
-          required={true}
+          // required={true}
         />
         <Button
           variant="contained"
           color="primary"
           type="submit"
-          style={{ padding: "15px", marginLeft: "10px" }}
+          style={{ padding: "5px", marginLeft: "10px" }}
         >
           send
         </Button>
