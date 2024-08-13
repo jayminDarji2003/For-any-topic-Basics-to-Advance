@@ -48,12 +48,14 @@ const Login = () => {
           toast.success("Successfully login");
         }
 
+        document.cookie = `token=${response?.data?.token}`;
+
         setEmail("");
         setPassword("");
 
         dispatch(addToken(response?.data?.token));
 
-        navigate("/dashboard/user");
+        navigate("/dashboard");
       } catch (error) {
         if (error.response && error.response.status === 400) {
           toast.error(error.response.data.message);

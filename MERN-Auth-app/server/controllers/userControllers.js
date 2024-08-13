@@ -95,28 +95,24 @@ const login = async (req, res) => {
                     expiresIn: "2h"
                 });
 
-            // user.token = token;
-            // req.user = user;
+            user.token = token;
+            req.user = user;
 
             // create cookie
-            // const options = {
-            //     httpOnly: true,
-            //     secure: true,
-            //     sameSite: "none"
-            // }
+            const options = {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            }
 
             // create cookie and send response
-            // res.cookie("token", token, options).status(200).json({
-            //     success: true,
-            //     token,
-            //     user,
-            //     message: "user logged in successfully"
-            // })
+            res.cookie("token", token, options).status(200).json({
+                success: true,
+                token,
+                user,
+                message: "user logged in successfully"
+            })
 
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" })
-                .json({
-                    message: "login successful",
-                });
         }
 
     } catch (error) {
@@ -130,44 +126,4 @@ const login = async (req, res) => {
 }
 
 
-
-const users = async (req, res) => {
-    try {
-        const cookieData = req.cookies;
-
-        console.log(cookieData)
-
-        if (cookieData !== undefined) {
-            return res.status(200).json({
-                success: true,
-                message: "users found successfully",
-                data: cookieData
-            })
-        } else {
-            return res.status(200).json({
-                success: false,
-                message: "token not found",
-            })
-        }
-    } catch (error) {
-        return res.status(401).json({
-            success: false,
-            message: "something went wrong while getting user"
-        })
-    }
-}
-
-const jwt_secret = "jaymindarji"
-
-const data = async (req, res) => {
-    const token = jwt.sign({ _id: "difbfbsfi" }, jwt_secret);
-
-    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" })
-        .json({
-            message: "login successful",
-        });
-}
-
-
-
-module.exports = { register, login, users, data }
+module.exports = { register, login}
